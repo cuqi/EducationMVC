@@ -1,43 +1,50 @@
-﻿@model IEnumerable<EducationMVC.Models.Student>
+﻿@model EducationMVC.ViewModels.StudentCourseViewModel
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Students</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+<form asp-controller="Students" asp-action="Index" method="get">
+    <p>
+        Student ID: <input type="text" asp-for="SearchStudentId" /> <input type="submit" value="Filter" />
+        First Name: <input type="text" asp-for="SearchFirstName" /> <input type="submit" value="Filter" />
+        Last Name: <input type="text" asp-for="SearchLastName" /> <input type="submit" value="Filter" />
+    </p>
+</form>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.StudentId)
+                @Html.DisplayNameFor(model => model.Students[0].StudentId)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.FirstName)
+                @Html.DisplayNameFor(model => model.Students[0].FirstName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LastName)
+                @Html.DisplayNameFor(model => model.Students[0].LastName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EnrollmentDate)
+                @Html.DisplayNameFor(model => model.Students[0].EnrollmentDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.AcquiredCredits)
+                @Html.DisplayNameFor(model => model.Students[0].AcquiredCredits)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CurrentSemester)
+                @Html.DisplayNameFor(model => model.Students[0].CurrentSemester)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EducationLevel)
+                @Html.DisplayNameFor(model => model.Students[0].EducationLevel)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.Students) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.StudentId)

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EducationMVC.Data;
 using EducationMVC.Models;
+using EducationMVC.ViewModels;
 
 namespace EducationMVC.Controllers
 {
@@ -20,9 +21,30 @@ namespace EducationMVC.Controllers
         }
 
         // GET: Teachers
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string SearchFirstName, string SearchLastName, string SearchDegree, string SearchAcademicRank)
         {
-            return View(await _context.Teacher.ToListAsync());
+            IQueryable<Teacher> teachers = _context.Teacher.AsQueryable();
+            if (!string.IsNullOrEmpty(SearchFirstName))
+            {
+                teachers = teachers.Where(s => s.FirstName.Contains(SearchFirstName));
+            }
+            if (!string.IsNullOrEmpty(SearchLastName))
+            {
+                teachers = teachers.Where(s => s.LastName.Contains(SearchLastName));
+            }
+            if (!string.IsNullOrEmpty(SearchDegree))
+            {
+                teachers = teachers.Where(s => s.Degree.Contains(SearchDegree));
+            }
+            if (!string.IsNullOrEmpty(SearchAcademicRank))
+            {
+                teachers = teachers.Where(s => s.AcademicRank.Contains(SearchAcademicRank));
+            }
+            var teacherVM = new TeacherViewModel
+            {
+                Teachers = await teachers.ToListAsync()
+            };
+            return View(teacherVM);
         }
 
         // GET: Teachers/Details/5
