@@ -179,3 +179,5 @@ C:\Users\krsti\Desktop\EducationMVC\EducationMVC\EducationMVC\obj\Debug\netcorea
 C:\Users\krsti\Desktop\EducationMVC\EducationMVC\EducationMVC\obj\Debug\netcoreapp3.1\Razor\Views\Teachers\Details.cshtml.g.cs
 C:\Users\krsti\Desktop\EducationMVC\EducationMVC\EducationMVC\obj\Debug\netcoreapp3.1\Razor\Views\Teachers\Edit.cshtml.g.cs
 C:\Users\krsti\Desktop\EducationMVC\EducationMVC\EducationMVC\obj\Debug\netcoreapp3.1\Razor\Views\Teachers\Index.cshtml.g.cs
+C:\Users\krsti\Desktop\EducationMVC\EducationMVC\EducationMVC\obj\Debug\netcoreapp3.1\Razor\Views\Students\New.cshtml.g.cs
+C:\Users\krsti\Desktop\EducationMVC\EducationMVC\EducationMVC\obj\Debug\netcoreapp3.1\Razor\Views\Teachers\New.cshtml.g.cs

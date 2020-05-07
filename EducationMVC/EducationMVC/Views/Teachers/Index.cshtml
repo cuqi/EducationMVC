@@ -1,4 +1,4 @@
-﻿@model EducationMVC.ViewModels.TeacherViewModel
+﻿@model EducationMVC.ViewModels.TeacherFilterViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -8,6 +8,9 @@
 
 <p>
     <a asp-action="Create">Create New</a>
+</p>
+<p>
+    <a asp-action="New">Create New Teacher as Administrator</a>
 </p>
 <form asp-controller="Teachers" asp-action="Index" method="get">
     <p>
@@ -38,6 +41,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Teachers[0].HireDate)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Teachers[0].ProfilePicture)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -61,6 +67,10 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.HireDate)
+            </td>
+            <td>
+                <img src="~/images/@item.ProfilePicture" class="rounded-circle" height="40" width="40" asp-append-version="true" />
+                @Html.DisplayFor(modelItem => item.ProfilePicture)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

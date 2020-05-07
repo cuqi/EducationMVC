@@ -35,5 +35,7 @@ namespace EducationMVC.Models
 
         public ICollection<Course> Professor { get; set; }
         public ICollection<Course> Assistant { get; set; }
+
+        public string ProfilePicture { get; set; }
     }
 }

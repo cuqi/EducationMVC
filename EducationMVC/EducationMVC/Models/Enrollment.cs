@@ -12,8 +12,8 @@ namespace EducationMVC.Models
         [Key]
         public int Id { get; set; }
 
-        public int CourseId { get; set; }
-        public int StudentId { get; set; }
+        public int? CourseId { get; set; }
+        public int? StudentId { get; set; }
 
         [StringLength(10)]
         public string Semester { get; set; }

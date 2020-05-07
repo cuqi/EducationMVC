@@ -36,5 +36,7 @@ namespace EducationMVC.Models
         public string EducationLevel { get; set; }
 
         public ICollection<Enrollment> Courses { get; set; }
+
+        public string ProfilePicture { get; set; }
     }
 }

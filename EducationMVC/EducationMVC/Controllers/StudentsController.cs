@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -9,15 +10,20 @@ using EducationMVC.Data;
 using EducationMVC.Models;
 using EducationMVC.ViewModels;
 
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
+
 namespace EducationMVC.Controllers
 {
     public class StudentsController : Controller
     {
         private readonly EducationMVCContext _context;
+        private readonly IHostingEnvironment webHostEnvironment;
 
-        public StudentsController(EducationMVCContext context)
+        public StudentsController(EducationMVCContext context, IHostingEnvironment hostEnvironment)
         {
             _context = context;
+            webHostEnvironment = hostEnvironment;
         }
 
         // GET: Students
@@ -72,7 +78,7 @@ namespace EducationMVC.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,StudentId,FirstName,LastName,EnrollmentDate,AcquiredCredits,CurrentSemester,EducationLevel")] Student student)
+        public async Task<IActionResult> Create([Bind("Id,StudentId,FirstName,LastName,EnrollmentDate,AcquiredCredits,CurrentSemester,EducationLevel,ProfilePicture")] Student student)
         {
             if (ModelState.IsValid)
             {
@@ -104,7 +110,7 @@ namespace EducationMVC.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,StudentId,FirstName,LastName,EnrollmentDate,AcquiredCredits,CurrentSemester,EducationLevel")] Student student)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,StudentId,FirstName,LastName,EnrollmentDate,AcquiredCredits,CurrentSemester,EducationLevel,ProfilePicture")] Student student)
         {
             if (id != student.Id)
             {
@@ -166,6 +172,55 @@ namespace EducationMVC.Controllers
         private bool StudentExists(int id)
         {
             return _context.Student.Any(e => e.Id == id);
+        }
+
+        public IActionResult New()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> New(StudentViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                string uniqueFileName = UploadedFile(model);
+
+                Student student = new Student
+                {
+                    StudentId = model.StudentId,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    AcquiredCredits = model.AcquiredCredits,
+                    CurrentSemester = model.CurrentSemester,
+                    EducationLevel = model.EducationLevel,
+                    EnrollmentDate = model.EnrollmentDate,
+                    ProfilePicture = uniqueFileName,
+                };
+                _context.Add(student);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View();
+        }
+
+
+        private string UploadedFile(StudentViewModel model)
+        {
+            string uniqueFileName = null;
+
+            if (model.ProfileImage != null)
+            {
+                string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "images");
+                uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(model.ProfileImage.FileName);
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    model.ProfileImage.CopyTo(fileStream);
+                }
+            }
+            return uniqueFileName;
         }
     }
 }
