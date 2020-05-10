@@ -10,12 +10,13 @@ namespace EducationMVC.ViewModels
 {
     public class EnrollStudentsViewModel
     {
-        public int CourseId { get; set; }
-        public IList<int> StudentsId { get; set; }
+        public Course Course { get; set; }
+        public IEnumerable<int?> SelectedStudents { get; set; }
+        public IEnumerable<SelectListItem> StudentList { get; set; }
+        public IEnumerable<int?> SelectedCourses { get; set; }
+        public IEnumerable<SelectListItem> CoursesList { get; set; }
         public string Semester { get; set; }
         public int Year { get; set; }
-        public SelectList Courses { get; set; }
-        public SelectList Students { get; set; }
-   
+
     }
 }

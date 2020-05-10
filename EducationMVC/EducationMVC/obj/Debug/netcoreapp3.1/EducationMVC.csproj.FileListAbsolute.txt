@@ -157,8 +157,6 @@ C:\Users\krsti\Desktop\EducationMVC\EducationMVC\EducationMVC\bin\Debug\netcorea
 C:\Users\krsti\Desktop\EducationMVC\EducationMVC\EducationMVC\bin\Debug\netcoreapp3.1\tr\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\krsti\Desktop\EducationMVC\EducationMVC\EducationMVC\bin\Debug\netcoreapp3.1\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\krsti\Desktop\EducationMVC\EducationMVC\EducationMVC\bin\Debug\netcoreapp3.1\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
-C:\Users\krsti\Desktop\EducationMVC\EducationMVC\EducationMVC\obj\Debug\netcoreapp3.1\EducationMVC.csproj.CoreCompileInputs.cache
-C:\Users\krsti\Desktop\EducationMVC\EducationMVC\EducationMVC\obj\Debug\netcoreapp3.1\EducationMVC.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\krsti\Desktop\EducationMVC\EducationMVC\EducationMVC\obj\Debug\netcoreapp3.1\Razor\Views\Courses\Create.cshtml.g.cs
 C:\Users\krsti\Desktop\EducationMVC\EducationMVC\EducationMVC\obj\Debug\netcoreapp3.1\Razor\Views\Courses\Delete.cshtml.g.cs
 C:\Users\krsti\Desktop\EducationMVC\EducationMVC\EducationMVC\obj\Debug\netcoreapp3.1\Razor\Views\Courses\Details.cshtml.g.cs
@@ -181,3 +179,6 @@ C:\Users\krsti\Desktop\EducationMVC\EducationMVC\EducationMVC\obj\Debug\netcorea
 C:\Users\krsti\Desktop\EducationMVC\EducationMVC\EducationMVC\obj\Debug\netcoreapp3.1\Razor\Views\Teachers\Index.cshtml.g.cs
 C:\Users\krsti\Desktop\EducationMVC\EducationMVC\EducationMVC\obj\Debug\netcoreapp3.1\Razor\Views\Students\New.cshtml.g.cs
 C:\Users\krsti\Desktop\EducationMVC\EducationMVC\EducationMVC\obj\Debug\netcoreapp3.1\Razor\Views\Teachers\New.cshtml.g.cs
+C:\Users\krsti\Desktop\EducationMVC\EducationMVC\EducationMVC\obj\Debug\netcoreapp3.1\EducationMVC.csproj.CoreCompileInputs.cache
+C:\Users\krsti\Desktop\EducationMVC\EducationMVC\EducationMVC\obj\Debug\netcoreapp3.1\EducationMVC.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\krsti\Desktop\EducationMVC\EducationMVC\EducationMVC\obj\Debug\netcoreapp3.1\Razor\Views\Enrollments\EnrollStudents.cshtml.g.cs

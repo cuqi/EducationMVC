@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EducationMVC.Data;
 using EducationMVC.Models;
+using EducationMVC.ViewModels;
+using System.Collections.Immutable;
 
 namespace EducationMVC.Controllers
 {
@@ -20,10 +22,35 @@ namespace EducationMVC.Controllers
         }
 
         // GET: Enrollments
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchSemester, int? searchYear, string searchTitle)
         {
-            var educationMVCContext = _context.Enrollment.Include(e => e.Course).Include(e => e.Student);
-            return View(await educationMVCContext.ToListAsync());
+            IQueryable<Enrollment> enrollments = _context.Enrollment.AsQueryable();
+
+            IQueryable<string> SemesterQuery = _context.Enrollment.OrderBy(s => s.Semester).Select(s => s.Semester).Distinct();
+            IQueryable<int> YearQuery = _context.Enrollment.OrderBy(s => s.Year).Select(s => s.Year).Distinct();
+
+            if(!string.IsNullOrEmpty(searchTitle))
+            {
+                enrollments = enrollments.Where(s => s.Course.Title.Contains(searchTitle));
+            }
+            if (!string.IsNullOrEmpty(searchSemester))
+            {
+                enrollments = enrollments.Where(s => s.Semester.Contains(searchSemester));
+            }
+            if (searchYear != null)
+            {
+                enrollments = enrollments.Where(s => s.Year == searchYear);
+            }
+
+            enrollments = enrollments.Include(s => s.Student).Include(s => s.Course);
+
+            var enrollmentsFilterVM = new EnrollmentsFilterViewModel
+            {
+                Enrollments = await enrollments.ToListAsync(),
+                Semester = new SelectList(await SemesterQuery.ToListAsync())
+            };
+
+            return View(enrollmentsFilterVM);
         }
 
         // GET: Enrollments/Details/5
@@ -162,5 +189,74 @@ namespace EducationMVC.Controllers
         {
             return _context.Enrollment.Any(e => e.Id == id);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> EnrollStudents(int? id)
+        {
+            var course = _context.Course.Where(s => s.Id == id).Include(s => s.Students).First();
+
+            if (course == null)
+            {
+                return NotFound();
+            }
+
+            var enrollStudentsVM = new EnrollStudentsViewModel
+            {
+
+                Course = course,
+                /*CoursesList = new SelectList(_context.Course.OrderBy(s => s.Id), "Id", "Title"),*/
+                StudentList = new MultiSelectList(_context.Student.OrderBy(s => s.Id), "Id", "FirstName"),
+                SelectedStudents = course.Students.Select(s => s.StudentId),
+            };
+
+
+            return View(enrollStudentsVM);
+
+            /*IQueryable<Course> courses = _context.Course;
+            IQueryable<Student> students = _context.Student;
+            string[] semesters = new[] { "Summer", "Winter" };
+            int getYear = System.DateTime.Now.Year;
+            int[] years = Enumerable.Range(getYear - 10, 11).Reverse().ToArray();
+            var enrollStudentsViewModel = new EnrollStudentsViewModel
+            {
+                Courses = new SelectList(await courses.ToListAsync(), "Id", "Title"),
+                Students = new SelectList(await students.OrderBy(s => s.FirstName).ToListAsync(), "Id", "FirstName"),
+                Year = 100,
+                Semester = "Leten"
+            };
+
+            return View(enrollStudentsViewModel);*/
+
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EnrollStudents(int id, EnrollStudentsViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    IEnumerable<int?> listStudents = model.SelectedStudents;
+                    IQueryable<Enrollment> toBeRemoved = _context.Enrollment.Where(s => !listStudents.Contains(s.StudentId) && s.CourseId == id);
+                    _context.Enrollment.RemoveRange(toBeRemoved);
+                    IEnumerable<int?> existStudents = _context.Enrollment.Where(s => listStudents.Contains(s.StudentId) && s.CourseId == id).Select(s => s.StudentId);
+                    IEnumerable<int?> newStudents = listStudents.Where(s => !existStudents.Contains(s));
+
+                    foreach (int studentId in newStudents)
+                        _context.Enrollment.Add(new Enrollment { StudentId = studentId, CourseId = id, Year = model.Year, Semester = model.Semester, });
+
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    throw;
+                }
+                return RedirectToAction(nameof(CoursesController.Index));
+            }
+            return View(model);
+        }
+
     }
 }
