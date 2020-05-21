@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EducationMVC.Migrations
 {
     [DbContext(typeof(EducationMVCContext))]
-    [Migration("20200508123022_CourseTeacherStudent")]
-    partial class CourseTeacherStudent
+    [Migration("20200521221821_StudentTeacherCourse")]
+    partial class StudentTeacherCourse
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -130,6 +130,9 @@ namespace EducationMVC.Migrations
                     b.Property<int>("CurrentSemester")
                         .HasColumnType("int");
 
+                    b.Property<string>("Document")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("EducationLevel")
                         .HasColumnType("nvarchar(25)")
                         .HasMaxLength(25);
@@ -198,6 +201,38 @@ namespace EducationMVC.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Teacher");
+                });
+
+            modelBuilder.Entity("EducationMVC.Models.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Role")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("StudentId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TeacherId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Token")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("EducationMVC.Models.Course", b =>

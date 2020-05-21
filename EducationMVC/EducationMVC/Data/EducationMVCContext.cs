@@ -22,6 +22,8 @@ namespace EducationMVC.Data
 
         public DbSet<EducationMVC.Models.Teacher> Teacher { get; set; }
 
+        public DbSet<EducationMVC.Models.User> User { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<Course>()

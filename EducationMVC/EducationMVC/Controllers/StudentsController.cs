@@ -12,6 +12,7 @@ using EducationMVC.ViewModels;
 
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EducationMVC.Controllers
 {
@@ -221,6 +222,104 @@ namespace EducationMVC.Controllers
                 }
             }
             return uniqueFileName;
+        }
+
+        private string UploadedDoc(AuthStudentEditViewModel model)
+        {
+            string uniqueFileName = null;
+
+            if (model.document != null)
+            {
+                string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "docs");
+                uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(model.document.FileName);
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    model.document.CopyTo(fileStream);
+                }
+            }
+            return uniqueFileName;
+        }
+        [HttpGet]
+        public async Task<IActionResult> AuthStudent(int? id)
+        {
+            IQueryable<Student> student = _context.Student.Include(s => s.Courses).ThenInclude(s => s.Course);
+            student = student.Where(s => s.Id == id);
+            // Student - lista kursev - 1 kurs 
+            var authStudentVM = new AuthStudentViewModel
+            {
+                StudentList = await student.ToListAsync()
+            };
+            return View(authStudentVM);
+        }
+
+        public async Task<IActionResult> EditStudent(int? courseId, int? studentId)
+        {
+            IQueryable<Enrollment> enrollments = _context.Enrollment.AsQueryable();
+            if (courseId == null || studentId == null)
+            {
+                return NotFound();
+            }
+
+            //var course = await _context.Course.FindAsync(id);
+
+            var enrollmentId = enrollments.Where(s => s.CourseId == courseId).Where(s => s.StudentId == studentId);
+            var projecturl = await enrollmentId.ToListAsync();
+            var pr = "";
+            if (projecturl.Count == 0)
+            {
+                pr = "";
+            }
+            else
+            {
+                pr = projecturl[0].ProjectUrl;
+            }
+
+            //enrollmentId = enrollments.Where(s => s.Id == enrollmentId)
+            var authStudentVM = new AuthStudentEditViewModel
+            {
+                //ProjectUrl = enrollmentId.ToString(),
+                PURL = pr
+            };
+            return View(authStudentVM);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditStudent(int? id, Enrollment enrollment, AuthStudentEditViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    string uniqueFileName = UploadedDoc(model);
+                    enrollment.SeminalUrl = uniqueFileName;
+                    _context.Update(enrollment);
+                    await _context.SaveChangesAsync();
+                    await TryUpdateModelAsync<Enrollment>(
+                        enrollment,
+                        "",
+                        s => s.ProjectUrl, s => s.SeminalUrl);
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!EnrollmentExists(enrollment.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(enrollment);
+        }
+
+        private bool EnrollmentExists(int id)
+        {
+            return _context.Enrollment.Any(e => e.Id == id);
         }
     }
 }

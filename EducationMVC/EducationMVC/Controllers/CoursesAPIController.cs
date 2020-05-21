@@ -10,6 +10,7 @@ using EducationMVC.Models;
 
 namespace EducationMVC.Controllers
 {
+    [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
     public class CoursesAPIController : ControllerBase
@@ -46,7 +47,7 @@ namespace EducationMVC.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCourse(int id, Course course)
+        public async Task<IActionResult> PutCourse([FromRoute]int id, [FromBody]Course course)
         {
             if (id != course.Id)
             {
@@ -78,7 +79,7 @@ namespace EducationMVC.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Course>> PostCourse(Course course)
+        public async Task<ActionResult<Course>> PostCourse([FromBody]Course course)
         {
             _context.Course.Add(course);
             await _context.SaveChangesAsync();

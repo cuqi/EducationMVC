@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EducationMVC.Migrations
 {
-    public partial class CourseTeacherStudent : Migration
+    public partial class StudentTeacherCourse : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -20,7 +20,8 @@ namespace EducationMVC.Migrations
                     AcquiredCredits = table.Column<int>(nullable: false),
                     CurrentSemester = table.Column<int>(nullable: false),
                     EducationLevel = table.Column<string>(maxLength: 25, nullable: true),
-                    ProfilePicture = table.Column<string>(nullable: true)
+                    ProfilePicture = table.Column<string>(nullable: true),
+                    Document = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -44,6 +45,24 @@ namespace EducationMVC.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Teacher", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "User",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Username = table.Column<string>(nullable: false),
+                    Password = table.Column<string>(nullable: false),
+                    Token = table.Column<string>(nullable: true),
+                    Role = table.Column<string>(nullable: true),
+                    TeacherId = table.Column<int>(nullable: true),
+                    StudentId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_User", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -138,6 +157,9 @@ namespace EducationMVC.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Enrollment");
+
+            migrationBuilder.DropTable(
+                name: "User");
 
             migrationBuilder.DropTable(
                 name: "Course");

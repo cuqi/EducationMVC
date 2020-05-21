@@ -172,5 +172,6 @@ namespace EducationMVC.Controllers
         {
             return _context.Course.Any(e => e.Id == id);
         }
+
     }
 }

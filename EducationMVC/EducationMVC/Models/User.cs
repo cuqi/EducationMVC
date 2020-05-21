@@ -21,10 +21,7 @@ namespace EducationMVC.Models
 
         public string Token { get; set; }
 
-        enum Title { Admin, Teacher, Student };
-
-        Title Role { get; set; }
-
+        public string Role { get; set; }
 
         //if the user is a teacher
         public int? TeacherId { get; set; }

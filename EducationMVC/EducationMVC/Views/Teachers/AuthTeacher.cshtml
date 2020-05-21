@@ -1,0 +1,39 @@
+﻿@model EducationMVC.ViewModels.AuthTeacherViewModel
+@{
+    ViewData["Title"] = "My courses";
+}
+
+<h1>Displaying courses for selected Teacher</h1>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayFor(model => model.nameTeacher)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.CourseList)
+        {
+            <tr>
+                <td>
+
+                    @Html.DisplayFor(modelItem => item.Title)
+
+                </td>
+                <td>
+                    @foreach (var student in item.Students)
+                    {
+                    <a asp-controller="Students" asp-action="Details" asp-route-id="@student.Id"> @student.Student.FirstName @student.Student.LastName</a> <br />
+                    }
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
